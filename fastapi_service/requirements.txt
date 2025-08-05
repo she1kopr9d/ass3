@@ -1,0 +1,10 @@
+cryptography
+fastapi
+faststream
+faststream[rabbit]
+httpx
+pydantic
+pydantic[email]
+pydantic-settings
+uvicorn
+httpx

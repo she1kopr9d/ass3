@@ -1,0 +1,40 @@
+services:
+
+    fastapi-service:
+        build: ./fastapi_service
+        command: uvicorn main:app --host 0.0.0.0 --port 8000
+        ports:
+            - "8765:8000"
+        env_file:
+            - .env
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+        volumes:
+            - ./fastapi_service:/app
+            - ./fastapi_service/uploads:/app/uploads
+
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: rabbitmq
+        ports:
+        - "5672:5672"
+        - "15672:15672"
+        env_file:
+            - .env
+        healthcheck:
+            test: ["CMD", "rabbitmq-diagnostics", "ping"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        environment:
+            RABBITMQ_LOGS: "-"
+            RABBITMQ_LOG_LEVEL: "warning"
+    telegram-bot:
+        build: ./telegram_bot_service
+        command: python main.py
+        env_file:
+            - .env
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
