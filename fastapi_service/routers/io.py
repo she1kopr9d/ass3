@@ -22,7 +22,7 @@ async def add_file_handler(
     file_bytes = data.filebytes.encode("latin1")
     folder_path = "uploads/"
     os.makedirs(folder_path, exist_ok=True)
-    generated_name = f"{uuid.uuid4().hex}.exe"
+    generated_name = f"{uuid.uuid4().hex}.{data.extension}"
     full_path = os.path.join(folder_path, generated_name)
 
     with open(full_path, "wb") as f:

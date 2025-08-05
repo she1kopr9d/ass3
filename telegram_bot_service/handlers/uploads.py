@@ -1,3 +1,4 @@
+import os
 import aiogram
 import aiogram.types
 
@@ -18,8 +19,10 @@ async def handle_document(message: aiogram.types.Message):
     raw_bytes = file_bytes.read()
     encoded_bytes = raw_bytes.decode("latin1")
 
+    extension = os.path.splitext(document.file_name)[1]
     data = {
         "filebytes": encoded_bytes,
+        "extension": extension,
         "user_id": message.from_user.id,
     }
 
